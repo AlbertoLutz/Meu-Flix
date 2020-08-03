@@ -1,106 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PageDefaul from '../../../components/PageDefault';
+import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
-
+import Button from '../../../components/Button';
 
 function CadastroCategoria() {
   const valoresIniciais = {
-    nome: '',
+    titulo: '',
     descricao: '',
     cor: '',
   }
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState('valoresIniciais');
+  const [values, setValues] = useState(valoresIniciais);
 
 
   function setValue(chave, valor) {
+    // chave: nome, descricao, bla, bli
     setValues({
       ...values,
-      [chave]: valor,
+      [chave]: valor, // nome: 'valor'
     })
   }
 
   function handleChange(infosDoEvento) {
-    const { name, value } = infosDoEvento.target;
-    setValue(name, value);
+    setValue(
+      infosDoEvento.target.getAttribute('name'),
+      infosDoEvento.target.value
+    );
   }
 
+  // ============
+
+  useEffect(() => {
+    if(window.location.href.includes('localhost')) {
+      const URL = 'http://localhost:8080/categorias'; 
+      fetch(URL)
+       .then(async (respostaDoServer) =>{
+        if(respostaDoServer.ok) {
+          const resposta = await respostaDoServer.json();
+          setCategorias(resposta);
+          return; 
+        }
+        throw new Error('Não foi possível pegar os dados');
+       })
+    }    
+  }, []);
+
   return (
-    <PageDefaul>
-      <h1>Cadastro de Categoria: {values.nome}</h1>
+    <PageDefault>
+      <h1>Cadastro de Categoria: {values.titulo}</h1>
 
-      <form onSubmit={function haldleSubmit(infosDoEvento) {
-        infosDoEvento.preventDefault();
-        setCategorias([...categorias, values]);
+      <form onSubmit={function handleSubmit(infosDoEvento) {
+          infosDoEvento.preventDefault();
 
-         setValues(valoresIniciais)
+          setCategorias([
+            ...categorias,
+            values
+          ]);
 
+          setValues(valoresIniciais)
       }}>
 
-        <FormField 
-        label="Nome da Categoria"
-        type="text"
-        name="nome"
-        value={values.nome}
-        onChange={handleChange} 
-        
+        <FormField
+          label="Nome da Categoria"
+          name="titulo"
+          value={values.titulo}
+          onChange={handleChange}
         />
-        
-        <div> 
-
-          <label>
-            Descrição
-           <textarea type="text"
-              value={values.descricao}
-              name="descricao"
-              onChange={handleChange}            //setNomeDaCategoria(infosDoEvento.target.value);
-            />
-          </label>
-
-        </div>
 
         <FormField
-        label="Cor"
-        type="color"
-        name="cor"
-        value={values.cor}
-        onChange={handleChange}
+          label="Descrição:"
+          type="textarea"
+          name="descricao"
+          value={values.descricao}
+          onChange={handleChange}
         />
+       
 
-       {/* <div>
+        <FormField
+          label="Cor"
+          type="color"
+          name="cor"
+          value={values.cor}
+          onChange={handleChange}
+        />
+        {/* <div>
           <label>
-            Cor
-           <input type="color"
+            Cor:
+            <input
+              type="color"
               value={values.cor}
               name="cor"
-              onChange={handleChange}             
+              onChange={handleChange}
             />
           </label>
+        </div> */}
 
-       </div>*/}
-
-
-        <button>
+        <Button>
           Cadastrar
-       </button>
-
+        </Button>
+        
       </form>
 
+      
       <ul>
-        {categorias.map((categoria, indice) => {
-          return (
-            <li key={`${categoria}${indice}`}>
-              {categoria.nome}
+        {categorias.map((categoria, indice) => (
+            <li key={`${categoria.titulo}`}>
+              {categoria.titulo}
             </li>
-          )
-        })}
+         )
+        )}
       </ul>
-
       <Link to="/">
-        Voltar para a Home
-        </Link>
-    </PageDefaul>
+        Ir para home
+      </Link>
+    </PageDefault>
   )
 }
 

@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import SlickSlider from 'react-slick';
 import styled from 'styled-components';
 
 const Container = styled.ul`
   padding: 0;
-  margin: 0; 
+  margin: 0;
   .slick-prev,
   .slick-next {
     z-index: 50;
@@ -15,27 +14,16 @@ const Container = styled.ul`
     width: 30px;
     height: 30px;
     transform: initial;
-
-    }
     &:before {
       font-size: 30px;
-    
+    }
   }
   
   .slick-prev {
     left: 0;
-
-    &:before {
-      color: var(--purple);
-    }
-   
   }
   .slick-next {
     right: 16px;
-     
-    &:before {
-      color: var(--purple);
-    }
   }
 `;
 
