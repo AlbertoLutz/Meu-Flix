@@ -4,6 +4,7 @@ import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
 import useForm from '../../../hooks/useForm';
+import styled from 'styled-components';
 
 function CadastroCategoria() {
   const valoresIniciais = {
@@ -89,7 +90,7 @@ function CadastroCategoria() {
           onChange={handleChange}
         />
 
-        <Button>
+        <Button style={{margin: "25px 0"}}>
           Cadastrar
         </Button>
       </form>
@@ -110,10 +111,16 @@ function CadastroCategoria() {
       </ul>
 
       <Link to="/">
+        <Button style={{color: "green", margin: "25px 0"}}>
         Ir para home
+        </Button>
       </Link>
     </PageDefault>
   );
 }
+
+
+
+
 
 export default CadastroCategoria;
